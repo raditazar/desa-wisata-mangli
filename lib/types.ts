@@ -1,0 +1,76 @@
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+export type PackageType = "live-in" | "edukasi-berkebun" | "coming-soon";
+
+export interface TourPackage {
+  id: PackageType;
+  name: string;
+  tagline: string;
+  description: string;
+  price: number;
+  priceUnit: string;
+  image: string;
+  features: string[];
+  dateType: "range" | "single" | "none";
+  isAvailable: boolean;
+  maxTickets: number;
+}
+
+export type BookingStep = 1 | 2 | 3;
+
+export interface BookingDates {
+  checkIn?: Date;
+  checkOut?: Date;
+  visitDate?: Date;
+}
+
+export interface PersonalData {
+  fullName: string;
+  email: string;
+  phone: string;
+  institution: string;
+  specialRequests: string;
+  numberOfAdults: number;
+  numberOfChildren: number;
+}
+
+export interface BookingState {
+  currentStep: BookingStep;
+  selectedPackage: PackageType | null;
+  dates: BookingDates;
+  tickets: number;
+  personalData: PersonalData;
+  isConfirmed: boolean;
+  direction: number;
+}
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  content: string;
+  avatar: string;
+  rating: number;
+}
+
+export interface FaqItem {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+export interface GalleryItem {
+  id: string;
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+export interface VisitStep {
+  stepNumber: number;
+  title: string;
+  description: string;
+}
