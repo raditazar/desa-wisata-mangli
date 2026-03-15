@@ -13,9 +13,9 @@ interface ButtonProps {
 }
 
 const variantStyles = {
-  primary: "bg-primary text-white hover:bg-primary-dark",
-  secondary: "bg-accent text-white hover:bg-accent-light",
-  outline: "border-2 border-primary text-primary hover:bg-primary hover:text-white",
+  primary: "bg-[#1a2517] text-white hover:bg-[#243420]",
+  secondary: "bg-[#acc8a2] text-[#1a2517] hover:bg-[#96b88a]",
+  outline: "border-2 border-[#1a2517] text-[#1a2517] hover:bg-[#1a2517] hover:text-white",
 };
 
 const sizeStyles = {
@@ -35,7 +35,7 @@ export default function Button({
   type = "button",
 }: ButtonProps) {
   const baseClasses = cn(
-    "inline-flex items-center justify-center rounded-full font-medium font-sans transition-all duration-300 ease-in-out hover:shadow-lg cursor-pointer",
+    "inline-flex items-center justify-center rounded-full font-semibold font-sans transition-all duration-300 ease-in-out hover:shadow-lg cursor-pointer",
     variantStyles[variant],
     sizeStyles[size],
     disabled && "opacity-50 cursor-not-allowed pointer-events-none",
@@ -44,7 +44,7 @@ export default function Button({
 
   if (href) {
     return (
-      <Link href={href} className={baseClasses}>
+      <Link href={href} onClick={onClick} className={baseClasses}>
         {children}
       </Link>
     );

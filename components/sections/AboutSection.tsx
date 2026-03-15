@@ -1,70 +1,89 @@
-import { Users, Calendar, TreePine } from "lucide-react";
-import AnimatedSection from "@/components/ui/AnimatedSection";
-import SectionHeading from "@/components/ui/SectionHeading";
+"use client";
 
-const stats = [
-  { icon: Users, value: "500+", label: "Pengunjung" },
-  { icon: Calendar, value: "15+", label: "Program Wisata" },
-  { icon: TreePine, value: "2019", label: "Berdiri Sejak" },
+import { motion } from "framer-motion";
+import { GALLERY_ITEMS } from "@/lib/constants";
+import Link from "next/link";
+import AnimatedSection from "@/components/ui/AnimatedSection";
+
+const bentoLayout = [
+  "col-span-2 row-span-3", // large square
+  "col-span-1 row-span-2", // small
+  "col-span-1 row-span-1", // tall
+  "col-span-1 row-span-1", // small
+   "col-span-2 row-span-1", // wide
 ];
 
 export default function AboutSection() {
+  const items = GALLERY_ITEMS.slice(0, bentoLayout.length);
+
   return (
-    <section id="about" className="py-24 lg:py-32">
-      <div className="section-container">
-        <div className="lg:grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          {/* Image */}
-          <AnimatedSection>
-            <div className="relative rounded-[20px] lg:rounded-[28px] overflow-hidden aspect-[4/3] bg-gradient-to-br from-surface to-surface-dark">
-              <div className="absolute inset-0 flex items-center justify-center text-muted">
-                <TreePine size={64} />
+    <section id="about" className="py-16 lg:py-24">
+      <div className="px-4 md:px-6 lg:px-8 mx-auto max-w-11/12">
+        {/* Header row: headline left, subheadline right */}
+        <AnimatedSection className="flex flex-col md:flex-row md:items-start gap-6 md:gap-12 mb-8 lg:mb-10">
+          {/* Left: headline */}
+          <div className="md:w-1/2">
+            <div className="flex flex-col text-4xl md:text-5xl lg:text-6xl font-light text-[#1a2517] leading-tight">
+              <p>
+                Kenal Lebih Dekat dengan
+              </p>
+              <p className="font-bold leading-relaxed">
+                Desa Mangli
+              </p>
+            </div>
+            {/* WhatsApp CTA */}
+            <Link
+              href="https://wa.me/6281234567890"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-4 h-20 px-12 rounded-full text-white bg-[#1a2517] text-2xl font-semibold transition-all duration-300 hover:bg-[#acc8a2] hover:text-[#1a2517]"
+            >
+              Hubungi Kami
+            </Link>
+          </div>
+
+          {/* Right: subheadline */}
+          <div className="md:w-1/2 md:pt-2 lg:py-16">
+            <p className="text-lg md:text-xl lg:text-2xl font-normal text-[#4a5e45] leading-relaxed">
+              Eksplorasi keindahan Desa Mangli — dimana alam, budaya, dan kehangatan warga berpadu menyambut Anda.
+            </p>
+          </div>
+        </AnimatedSection>
+
+        {/* Bento grid gallery */}
+        <div className="grid grid-cols-2 md:grid-cols-4 auto-rows-[160px] md:auto-rows-[210px] lg:auto-rows-[240px] gap-2 md:gap-2.5">
+          {items.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, scale: 0.96 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: index * 0.07 }}
+              className={`group relative rounded-xl lg:rounded-2xl overflow-hidden cursor-pointer ${bentoLayout[index]}`}
+            >
+              {/* Image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={item.src}
+                alt={item.alt}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+              />
+
+              {/* Default subtle gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent transition-opacity duration-500 group-hover:opacity-0" />
+
+              {/* Hover overlay + caption */}
+              <div className="absolute inset-0 bg-[#1a2517]/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
+                <span className="text-white font-semibold text-sm md:text-base tracking-wide translate-y-4 group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
+                  {item.caption}
+                </span>
               </div>
-            </div>
-          </AnimatedSection>
 
-          {/* Content */}
-          <AnimatedSection delay={0.2} className="mt-10 lg:mt-0">
-            <SectionHeading
-              title="Tentang Desa Mangli"
-              subtitle="Mengenal lebih dekat kehidupan desa yang penuh pesona"
-              centered={false}
-            />
-
-            <div className="space-y-4 text-muted leading-relaxed">
-              <p>
-                Desa Mangli terletak di lereng perbukitan Kabupaten Magelang, Jawa
-                Tengah. Dikelilingi oleh hamparan sawah terasering dan kebun yang
-                hijau, desa ini menawarkan ketenangan dan keindahan alam yang sulit
-                ditemukan di kota.
-              </p>
-              <p>
-                Sejak 2019, warga desa berkomitmen untuk melestarikan budaya lokal
-                sambil membuka pintu bagi wisatawan yang ingin merasakan kehidupan
-                desa yang sesungguhnya. Dari menginap di rumah warga hingga belajar
-                berkebun bersama petani, setiap pengalaman dirancang agar Anda
-                merasa menjadi bagian dari komunitas.
-              </p>
-            </div>
-
-            {/* Stats */}
-            <div className="mt-8 grid grid-cols-3 gap-4">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="text-center p-4 bg-surface rounded-2xl"
-                >
-                  <stat.icon
-                    size={24}
-                    className="mx-auto mb-2 text-accent"
-                  />
-                  <div className="font-serif text-2xl font-bold text-primary">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-muted mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </AnimatedSection>
+              {/* Corner accent brackets */}
+              <div className="absolute top-3 left-3 w-6 h-6 border-t-2 border-l-2 border-[#acc8a2] opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 scale-50 group-hover:scale-100" />
+              <div className="absolute bottom-3 right-3 w-6 h-6 border-b-2 border-r-2 border-[#acc8a2] opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 scale-50 group-hover:scale-100" />
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

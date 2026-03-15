@@ -1,28 +1,30 @@
 @import "tailwindcss";
 
 :root {
-  --color-primary: #112D4E;
-  --color-accent: #3F72AF;
-  --color-surface: #DBE2EF;
+  --color-primary: #1a2517;
+  --color-secondary: #2d3e29;
+  --color-accent: #acc8a2;
   --background: #F9F7F7;
-  --color-primary-dark: #0A1F38;
-  --color-accent-light: #5A8FC4;
-  --color-surface-dark: #C5CDE0;
-  --color-text-muted: #6B7C93;
+  --color-primary-dark: #111a0f;
+  --color-accent-light: #c8ddc2;
+  --color-surface: #e8f0e5;
+  --color-surface-dark: #d4e0d0;
+  --color-text-muted: #4a5e45;
 }
 
 @theme inline {
-  --font-sans: var(--font-dm-sans);
-  --font-serif: var(--font-playfair);
+  --font-sans: var(--font-titillium);
+  --font-serif: var(--font-titillium);
 
-  --color-primary: #112D4E;
-  --color-primary-dark: #0A1F38;
-  --color-accent: #3F72AF;
-  --color-accent-light: #5A8FC4;
-  --color-surface: #DBE2EF;
-  --color-surface-dark: #C5CDE0;
+  --color-primary: #1a2517;
+  --color-primary-dark: #111a0f;
+  --color-secondary: #2d3e29;
+  --color-accent: #acc8a2;
+  --color-accent-light: #c8ddc2;
+  --color-surface: #e8f0e5;
+  --color-surface-dark: #d4e0d0;
   --color-background: #F9F7F7;
-  --color-muted: #6B7C93;
+  --color-muted: #4a5e45;
 }
 
 html {
@@ -31,10 +33,10 @@ html {
 
 body {
   background-color: var(--background);
-  color: var(--color-primary);
+  color: var(--color-secondary);
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
 .section-container {
-  @apply mx-auto w-full max-w-7xl px-6 md:px-12 lg:px-16;
+  @apply mx-auto w-full max-w-7xl px-4 md:px-8 lg:px-10;
 }

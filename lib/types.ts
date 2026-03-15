@@ -1,6 +1,8 @@
 export interface NavLink {
   label: string;
   href: string;
+  hasDropdown?: boolean;
+  children?: NavLink[];
 }
 
 export type PackageType = "live-in" | "edukasi-berkebun" | "coming-soon";

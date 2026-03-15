@@ -5,8 +5,8 @@ import PackageCard from "@/components/ui/PackageCard";
 
 export default function PackagesSection() {
   return (
-    <section id="packages" className="py-24 lg:py-32 bg-surface/50">
-      <div className="section-container">
+    <section id="packages" className="py-16 lg:py-24">
+      <div className="px-4 md:px-6 lg:px-8 mx-auto max-w-7xl">
         <AnimatedSection>
           <SectionHeading
             title="Paket Wisata Kami"

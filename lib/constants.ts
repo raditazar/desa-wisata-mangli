@@ -21,10 +21,17 @@ export const SITE_CONFIG = {
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Beranda", href: "#hero" },
-  { label: "Tentang", href: "#about" },
-  { label: "Paket Wisata", href: "#packages" },
+  {
+    label: "Paket Wisata",
+    href: "#packages",
+    hasDropdown: true,
+    children: [
+      { label: "Live-In", href: "/booking?package=live-in" },
+      { label: "Edukasi Berkebun", href: "/booking?package=edukasi-berkebun" },
+    ],
+  },
   { label: "Galeri", href: "#gallery" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Visit", href: "#visit" },
 ];
 
 export const TOUR_PACKAGES: TourPackage[] = [
@@ -36,7 +43,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Menginap di rumah warga dan merasakan kehidupan desa yang autentik. Ikut serta dalam kegiatan harian, masak bersama, dan nikmati keramahan warga desa.",
     price: 250000,
     priceUnit: "per malam / orang",
-    image: "/images/packages/live-in.jpg",
+    image: "/images/packages/live-in.svg",
     features: [
       "Menginap di rumah warga",
       "Makan 3x sehari masakan lokal",
@@ -56,7 +63,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Program edukasi interaktif langsung di kebun warga. Pelajari teknik bercocok tanam organik, panen hasil kebun, dan bawa pulang hasil panenmu.",
     price: 75000,
     priceUnit: "per orang",
-    image: "/images/packages/edukasi-berkebun.jpg",
+    image: "/images/packages/edukasi-berkebun.svg",
     features: [
       "Praktik menanam & merawat tanaman",
       "Panen sayur & buah segar",
@@ -76,7 +83,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Kami sedang menyiapkan paket wisata baru yang lebih seru. Nantikan pengalaman wisata desa yang belum pernah ada sebelumnya!",
     price: 0,
     priceUnit: "",
-    image: "/images/packages/coming-soon.jpg",
+    image: "/images/packages/coming-soon.svg",
     features: [],
     dateType: "none",
     isAvailable: false,
@@ -91,7 +98,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Guru SD Negeri 3 Semarang",
     content:
       "Pengalaman yang luar biasa untuk murid-murid kami. Mereka belajar banyak tentang alam dan kehidupan desa. Program edukasi berkebunnya sangat interaktif!",
-    avatar: "/images/testimoni/person-1.jpg",
+    avatar: "/images/testimoni/person-1.svg",
     rating: 5,
   },
   {
@@ -100,7 +107,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Traveler & Content Creator",
     content:
       "Live-in di Desa Mangli adalah pengalaman yang tidak akan saya lupakan. Warganya ramah, makanannya enak, dan pemandangannya indah sekali.",
-    avatar: "/images/testimoni/person-2.jpg",
+    avatar: "/images/testimoni/person-2.svg",
     rating: 5,
   },
   {
@@ -109,7 +116,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Mahasiswa Universitas Gadjah Mada",
     content:
       "Cocok banget untuk refreshing dari rutinitas kampus. Belajar berkebun sambil menikmati udara segar pegunungan. Pasti akan kembali lagi!",
-    avatar: "/images/testimoni/person-3.jpg",
+    avatar: "/images/testimoni/person-3.svg",
     rating: 5,
   },
   {
@@ -118,7 +125,7 @@ export const TESTIMONIALS: Testimonial[] = [
     role: "Fotografer Profesional",
     content:
       "Spot foto di Desa Mangli sangat memukau. Sawah terasering, kebun, dan rumah-rumah tradisional jadi objek foto yang sempurna. Sangat direkomendasikan!",
-    avatar: "/images/testimoni/person-4.jpg",
+    avatar: "/images/testimoni/person-4.svg",
     rating: 4,
   },
 ];
@@ -168,9 +175,7 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   { id: "3", src: "/images/gallery/gallery-3.jpg", alt: "Rumah tradisional desa", caption: "Rumah Tradisional" },
   { id: "4", src: "/images/gallery/gallery-4.jpg", alt: "Anak-anak bermain di desa", caption: "Aktivitas Anak" },
   { id: "5", src: "/images/gallery/gallery-5.jpg", alt: "Masak bersama warga", caption: "Kuliner Lokal" },
-  { id: "6", src: "/images/gallery/gallery-6.jpg", alt: "Pemandangan matahari terbit", caption: "Sunrise" },
-  { id: "7", src: "/images/gallery/gallery-7.jpg", alt: "Kegiatan budaya desa", caption: "Budaya Desa" },
-  { id: "8", src: "/images/gallery/gallery-8.jpg", alt: "Jalan setapak di kebun teh", caption: "Kebun Teh" },
+  { id: "8", src: "/images/gallery/gallery-8.svg", alt: "Jalan setapak di kebun teh", caption: "Kebun Teh" },
 ];
 
 export const VISIT_STEPS: VisitStep[] = [

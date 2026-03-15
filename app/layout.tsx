@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
-import { Playfair_Display, DM_Sans } from "next/font/google";
+import { Titillium_Web } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const titillium = Titillium_Web({
+  variable: "--font-titillium",
   subsets: ["latin"],
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
+  weight: ["200", "300", "400", "600", "700", "900"],
   display: "swap",
 });
 
@@ -29,9 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body
-        className={`${playfair.variable} ${dmSans.variable} antialiased`}
-      >
+      <body className={`${titillium.variable} antialiased`}>
         <Navbar />
         <main>{children}</main>
         <Footer />
