@@ -43,7 +43,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Menginap di rumah warga dan merasakan kehidupan desa yang autentik. Ikut serta dalam kegiatan harian, masak bersama, dan nikmati keramahan warga desa.",
     price: 250000,
     priceUnit: "per malam / orang",
-    image: "/images/packages/live-in.svg",
+    image: "/images/packages/live-in.jpg",
     features: [
       "Menginap di rumah warga",
       "Makan 3x sehari masakan lokal",
@@ -63,7 +63,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
       "Program edukasi interaktif langsung di kebun warga. Pelajari teknik bercocok tanam organik, panen hasil kebun, dan bawa pulang hasil panenmu.",
     price: 75000,
     priceUnit: "per orang",
-    image: "/images/packages/edukasi-berkebun.svg",
+    image: "/images/packages/edukasi-berkebun.jpg",
     features: [
       "Praktik menanam & merawat tanaman",
       "Panen sayur & buah segar",
