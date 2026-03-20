@@ -33,7 +33,6 @@ const VISIT_STEPS = [
 const DISTANCES = [
   { place: "Pusat Kota Magelang", minutes: "30 menit" },
   { place: "Candi Borobudur", minutes: "45 menit" },
-  { place: "Stasiun Magelang", minutes: "35 menit" },
   { place: "Bandara YIA Yogyakarta", minutes: "75 menit" },
 ];
 

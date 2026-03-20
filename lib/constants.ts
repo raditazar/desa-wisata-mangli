@@ -54,6 +54,51 @@ export const TOUR_PACKAGES: TourPackage[] = [
     dateType: "range",
     isAvailable: true,
     maxTickets: 20,
+    ticketGroups: [
+      {
+        groupLabel: "Dewasa",
+        items: [
+          {
+            id: "live-in-adult",
+            label: "Tiket Dewasa",
+            description: "Usia 13 tahun ke atas",
+            price: 250000,
+            priceUnit: "per malam",
+            features: [
+              "Menginap di rumah warga",
+              "Makan 3x sehari masakan lokal",
+              "Kegiatan budaya & tradisional",
+              "Tur desa berpemandu",
+              "Perlengkapan tidur lengkap",
+            ],
+            minAge: 13,
+            maxQty: 20,
+          },
+        ],
+      },
+      {
+        groupLabel: "Anak-anak",
+        items: [
+          {
+            id: "live-in-child",
+            label: "Tiket Anak",
+            description: "Usia 5–12 tahun",
+            price: 150000,
+            priceUnit: "per malam",
+            features: [
+              "Menginap di rumah warga",
+              "Makan 3x sehari masakan lokal",
+              "Kegiatan budaya & tradisional",
+              "Tur desa berpemandu",
+              "Perlengkapan tidur lengkap",
+            ],
+            minAge: 5,
+            maxAge: 12,
+            maxQty: 20,
+          },
+        ],
+      },
+    ],
   },
   {
     id: "edukasi-berkebun",
@@ -74,6 +119,50 @@ export const TOUR_PACKAGES: TourPackage[] = [
     dateType: "single",
     isAvailable: true,
     maxTickets: 50,
+    ticketGroups: [
+      {
+        groupLabel: "Dewasa",
+        items: [
+          {
+            id: "berkebun-adult",
+            label: "Tiket Dewasa",
+            description: "Usia 13 tahun ke atas",
+            price: 75000,
+            priceUnit: "per orang",
+            features: [
+              "Praktik menanam & merawat tanaman",
+              "Panen sayur & buah segar",
+              "Belajar kompos & pupuk organik",
+              "Snack & minuman tradisional",
+              "Sertifikat partisipasi",
+            ],
+            minAge: 13,
+            maxQty: 50,
+          },
+        ],
+      },
+      {
+        groupLabel: "Anak-anak",
+        items: [
+          {
+            id: "berkebun-child",
+            label: "Tiket Anak",
+            description: "Usia 5–12 tahun",
+            price: 50000,
+            priceUnit: "per orang",
+            features: [
+              "Praktik menanam & merawat tanaman",
+              "Panen sayur & buah segar",
+              "Belajar kompos & pupuk organik",
+              "Snack & minuman tradisional",
+            ],
+            minAge: 5,
+            maxAge: 12,
+            maxQty: 50,
+          },
+        ],
+      },
+    ],
   },
   {
     id: "coming-soon",
@@ -88,6 +177,7 @@ export const TOUR_PACKAGES: TourPackage[] = [
     dateType: "none",
     isAvailable: false,
     maxTickets: 0,
+    ticketGroups: [],
   },
 ];
 

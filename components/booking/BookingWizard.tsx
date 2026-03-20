@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useBookingStore } from "@/stores/booking-store";
-import BookingProgressBar from "./BookingProgressBar";
 import StepPackageSelect from "./StepPackageSelect";
 import StepPersonalData from "./StepPersonalData";
 import StepPaymentSummary from "./StepPaymentSummary";
@@ -17,8 +16,11 @@ export default function BookingWizard() {
 
   return (
     <div>
-      <BookingProgressBar currentStep={currentStep} />
-
+      <div className="text-center mb-10">
+        <h1 className="font-light text-5xl md:text-6xl text-primary leading-tight">
+          Book Your <span className="font-bold">Experience</span> in Mangli
+        </h1>
+      </div>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={currentStep}

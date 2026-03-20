@@ -7,6 +7,23 @@ export interface NavLink {
 
 export type PackageType = "live-in" | "edukasi-berkebun" | "coming-soon";
 
+export interface TicketItem {
+  id: string;
+  label: string;
+  description: string;
+  price: number;
+  priceUnit: string;
+  features: string[];
+  minAge?: number;
+  maxAge?: number;
+  maxQty: number;
+}
+
+export interface TicketGroup {
+  groupLabel: string;
+  items: TicketItem[];
+}
+
 export interface TourPackage {
   id: PackageType;
   name: string;
@@ -19,6 +36,7 @@ export interface TourPackage {
   dateType: "range" | "single" | "none";
   isAvailable: boolean;
   maxTickets: number;
+  ticketGroups: TicketGroup[];
 }
 
 export type BookingStep = 1 | 2 | 3;
@@ -44,6 +62,7 @@ export interface BookingState {
   selectedPackage: PackageType | null;
   dates: BookingDates;
   tickets: number;
+  ticketSelections: Record<string, number>;
   personalData: PersonalData;
   isConfirmed: boolean;
   direction: number;

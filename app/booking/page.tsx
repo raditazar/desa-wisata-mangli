@@ -23,7 +23,7 @@ function BookingContent() {
 export default function BookingPage() {
   return (
     <div className="min-h-screen">
-      <div className="section-container py-12 lg:py-16">
+      <div className="mx-auto max-w-11/12 pt-6 pb-10">
         <Suspense fallback={<div className="text-center py-20 text-muted">Memuat...</div>}>
           <BookingContent />
         </Suspense>
