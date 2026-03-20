@@ -58,7 +58,7 @@ export default function PackagesSection() {
 
               <div className="border-t border-[#1a2517]/10 pt-6 flex items-center justify-between flex-wrap gap-4">
                 <Link
-                  href={`/booking?package=${liveIn.id}`}
+                  href="/booking"
                   className="inline-flex items-center justify-center h-16 px-12 rounded-full bg-[#1a2517] text-white font-medium text-2xl transition-all duration-300 hover:bg-[#acc8a2] hover:text-[#1a2517]"
                 >
                   Pesan Sekarang
@@ -94,7 +94,7 @@ export default function PackagesSection() {
 
               <div className="border-t border-[#1a2517]/10 pt-6 flex items-center justify-between flex-wrap gap-4">
                 <Link
-                  href={`/booking?package=${edukasi.id}`}
+                  href="/get-tickets"
                   className="inline-flex items-center justify-center h-16 px-12 rounded-full bg-[#1a2517] text-white font-medium text-2xl transition-all duration-300 hover:bg-[#acc8a2] hover:text-[#1a2517]"
                 >
                   Pesan Sekarang

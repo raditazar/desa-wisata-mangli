@@ -48,13 +48,13 @@ export interface BookingDates {
 }
 
 export interface PersonalData {
-  fullName: string;
-  email: string;
+  firstName: string;
+  lastName: string;
+  country: string;
   phone: string;
-  institution: string;
-  specialRequests: string;
-  numberOfAdults: number;
-  numberOfChildren: number;
+  age: string;
+  email: string;
+  confirmEmail: string;
 }
 
 export interface BookingState {

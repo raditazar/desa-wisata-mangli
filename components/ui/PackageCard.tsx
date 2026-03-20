@@ -12,7 +12,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
   return (
     <Card hover className="flex flex-col h-full">
       {/* Image */}
-      <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-surface to-surface-dark">
+      <div className="relative aspect-16/10 overflow-hidden bg-linear-to-br from-surface to-surface-dark">
         <div className="absolute inset-0 flex items-center justify-center text-muted">
           {!pkg.isAvailable && (
             <div className="absolute inset-0 bg-black/50 z-10 flex items-center justify-center">
@@ -62,7 +62,7 @@ export default function PackageCard({ pkg }: PackageCardProps) {
                 <span className="text-muted text-sm">/ {pkg.priceUnit}</span>
               </div>
               <Button
-                href={`/booking?package=${pkg.id}`}
+                href={pkg.id === 'live-in' ? '/booking' : '/get-tickets'}
                 className="w-full mt-4"
                 size="md"
               >

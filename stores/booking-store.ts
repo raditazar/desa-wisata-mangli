@@ -3,13 +3,13 @@ import type { BookingStep, PackageType, BookingDates, PersonalData } from "@/lib
 import { TOUR_PACKAGES } from "@/lib/constants";
 
 const initialPersonalData: PersonalData = {
-  fullName: "",
-  email: "",
+  firstName: "",
+  lastName: "",
+  country: "ID",
   phone: "",
-  institution: "",
-  specialRequests: "",
-  numberOfAdults: 1,
-  numberOfChildren: 0,
+  age: "",
+  email: "",
+  confirmEmail: "",
 };
 
 interface BookingStore {

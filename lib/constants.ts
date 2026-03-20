@@ -26,8 +26,8 @@ export const NAV_LINKS: NavLink[] = [
     href: "#packages",
     hasDropdown: true,
     children: [
-      { label: "Live-In", href: "/booking?package=live-in" },
-      { label: "Edukasi Berkebun", href: "/booking?package=edukasi-berkebun" },
+      { label: "Live-In", href: "/booking" },
+      { label: "Edukasi Berkebun", href: "/get-tickets" },
     ],
   },
   { label: "Galeri", href: "#gallery" },

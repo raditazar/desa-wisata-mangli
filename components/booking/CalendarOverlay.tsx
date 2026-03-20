@@ -178,15 +178,15 @@ export default function CalendarOverlay(props: CalendarOverlayProps) {
         type="button"
         onClick={() => setOpen(!open)}
         className={cn(
-          "w-full flex items-center gap-3 px-4 py-3 rounded-xl border bg-white",
+          "w-full flex items-center gap-3 px-4 py-5 rounded-2xl border bg-surface",
           "text-left transition-all duration-150 focus:outline-none",
           open
             ? "border-primary ring-1 ring-primary"
-            : "border-surface-dark hover:border-primary/50"
+            : "border-primary hover:border-primary"
         )}
       >
         <CalendarDays size={17} className={displayValue ? "text-accent" : "text-muted"} />
-        <span className={cn("flex-1 text-sm", displayValue ? "text-primary font-medium" : "text-muted/60")}>
+        <span className={cn("flex-1 text-xl", displayValue ? "text-primary font-semibold" : "text-primary/60")}>
           {displayValue || props.placeholder || "Pilih tanggal"}
         </span>
       </button>
