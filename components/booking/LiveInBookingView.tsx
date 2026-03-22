@@ -1,23 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import CalendarOverlay from "./CalendarOverlay";
 import SummarySidebar from "./SummarySidebar";
 import TicketRow from "./TicketRow";
 import { useBookingStore } from "@/stores/booking-store";
-import { TOUR_PACKAGES } from "@/lib/constants";
+import { mapApiToTourPackages } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-export default function LiveInBookingView() {
-  const { packageDates, setPackageDates, ticketSelections } = useBookingStore();
+export default function LiveInBookingView({ initialApiPackages }: { initialApiPackages?: any[] }) {
+  const { packageDates, setPackageDates, ticketSelections, tourPackages, setTourPackages } = useBookingStore();
   const [showTickets, setShowTickets] = useState(false);
+
+  useEffect(() => {
+    if (initialApiPackages && initialApiPackages.length > 0) {
+      setTourPackages(mapApiToTourPackages(initialApiPackages));
+    }
+  }, [initialApiPackages, setTourPackages]);
 
   // Focus on Live-In for booking page
   const pkgId = "live-in";
-  const pkg = TOUR_PACKAGES.find((p) => p.id === pkgId)!;
-  const promoPkg = TOUR_PACKAGES.find((p) => p.id === "edukasi-berkebun")!;
+  const pkg = tourPackages.find((p) => p.id === pkgId)!;
+  const promoPkg = tourPackages.find((p) => p.id === "edukasi-berkebun")!;
 
   const pkgDates = packageDates[pkgId] ?? {};
   const hasValidDate = !!pkgDates.checkIn && !!pkgDates.checkOut;

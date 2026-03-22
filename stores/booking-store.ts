@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { BookingStep, PackageType, BookingDates, PersonalData } from "@/lib/types";
+import type { BookingStep, PackageType, BookingDates, PersonalData, TourPackage } from "@/lib/types";
 import { TOUR_PACKAGES } from "@/lib/constants";
 
 const initialPersonalData: PersonalData = {
@@ -13,6 +13,8 @@ const initialPersonalData: PersonalData = {
 };
 
 interface BookingStore {
+  tourPackages: TourPackage[];
+  setTourPackages: (pkgs: TourPackage[]) => void;
   currentStep: BookingStep;
   /** Legacy single-package field – kept for backward compat with later steps */
   selectedPackage: PackageType | null;
@@ -43,6 +45,8 @@ interface BookingStore {
 }
 
 export const useBookingStore = create<BookingStore>((set, get) => ({
+  tourPackages: TOUR_PACKAGES,
+  setTourPackages: (pkgs) => set({ tourPackages: pkgs }),
   currentStep: 1,
   selectedPackage: null,
   packageDates: {},
@@ -101,10 +105,10 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
     })),
 
   calculateTotal: () => {
-    const { ticketSelections, packageDates } = get();
+    const { ticketSelections, packageDates, tourPackages } = get();
     let total = 0;
 
-    for (const pkg of TOUR_PACKAGES) {
+    for (const pkg of tourPackages) {
       if (!pkg.isAvailable) continue;
       const pkgDates = packageDates[pkg.id] ?? {};
 

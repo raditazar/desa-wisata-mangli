@@ -290,3 +290,44 @@ export const VISIT_STEPS: VisitStep[] = [
     description: "Datang ke Desa Mangli di tanggal yang dipilih dan nikmati pengalaman wisata yang tak terlupakan!",
   },
 ];
+
+export function mapApiToTourPackages(apiPackages: any[]): TourPackage[] {
+  if (!apiPackages || apiPackages.length === 0) return TOUR_PACKAGES;
+  return TOUR_PACKAGES.map(fallbackPkg => {
+    const matchingApiPkg = apiPackages.find(p => p.slug === fallbackPkg.id);
+    if (!matchingApiPkg) return fallbackPkg;
+
+    const newPkg = { ...fallbackPkg };
+    newPkg.name = matchingApiPkg.name || fallbackPkg.name;
+    newPkg.description = matchingApiPkg.description || fallbackPkg.description;
+    newPkg.maxTickets = matchingApiPkg.max_participants || fallbackPkg.maxTickets;
+
+    const activePrices = (matchingApiPkg.package_prices || []).filter((p: any) => p.is_active);
+    
+    if (activePrices.length > 0) {
+      newPkg.ticketGroups = fallbackPkg.ticketGroups.map(group => {
+        return {
+          ...group,
+          items: group.items.map(item => {
+             const lowerGroup = group.groupLabel.toLowerCase();
+             const lowerItem = item.label.toLowerCase().replace('tiket ', '');
+             const matchedPrice = activePrices.find((p: any) => 
+               p.name.toLowerCase() === lowerGroup || 
+               p.name.toLowerCase() === lowerItem
+             );
+             
+             if (matchedPrice) {
+               return {
+                 ...item,
+                 id: matchedPrice.id, // REAL DB UUID
+                 price: Number(matchedPrice.price),
+               };
+             }
+             return item;
+          })
+        };
+      });
+    }
+    return newPkg;
+  });
+}

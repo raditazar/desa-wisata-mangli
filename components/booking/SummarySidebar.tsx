@@ -21,7 +21,7 @@ export default function SummarySidebar({
   buttonText?: string;
   onContinueOverride?: () => void;
 }) {
-  const { ticketSelections, packageDates, calculateTotal } = useBookingStore();
+  const { ticketSelections, packageDates, calculateTotal, tourPackages } = useBookingStore();
   const router = useRouter();
   const total = calculateTotal();
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
@@ -44,7 +44,7 @@ export default function SummarySidebar({
 
   const lineGroups: LineGroup[] = [];
 
-  for (const pkg of TOUR_PACKAGES) {
+  for (const pkg of tourPackages) {
     if (!pkg.isAvailable) continue;
 
     const pkgDates = packageDates[pkg.id as PackageType] ?? {};
