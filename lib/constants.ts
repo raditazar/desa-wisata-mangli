@@ -20,7 +20,7 @@ export const SITE_CONFIG = {
 };
 
 export const NAV_LINKS: NavLink[] = [
-  { label: "Beranda", href: "#hero" },
+  { label: "Beranda", href: "/" },
   {
     label: "Paket Wisata",
     href: "#packages",

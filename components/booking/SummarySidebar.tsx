@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useBookingStore } from "@/stores/booking-store";
 import { TOUR_PACKAGES } from "@/lib/constants";
 import { formatCurrency, cn } from "@/lib/utils";
@@ -7,6 +8,7 @@ import { format } from "date-fns";
 import { id } from "date-fns/locale";
 import type { PackageType } from "@/lib/types";
 import { useRouter } from "next/navigation";
+import { ChevronUp } from "lucide-react";
 
 export default function SummarySidebar({ 
   disabled = false, 
@@ -22,6 +24,8 @@ export default function SummarySidebar({
   const { ticketSelections, packageDates, calculateTotal } = useBookingStore();
   const router = useRouter();
   const total = calculateTotal();
+  const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+  const totalItems = Object.values(ticketSelections).reduce((a, b) => a + (b || 0), 0);
 
   function nightsCount(checkIn?: Date, checkOut?: Date): number {
     if (!checkIn || !checkOut) return 0;
@@ -97,94 +101,130 @@ export default function SummarySidebar({
   };
 
   return (
-    <div className="sticky top-24 self-start">
-      <div className="bg-surface rounded-2xl shadow-sm overflow-hidden">
-        <div className="px-5 py-4">
-          <h3 className="font-bold text-primary text-2xl">Ringkasan Pesanan</h3>
-          {hasSelection && (
-            <p className="text-accent/80 text-xs mt-0.5">
-              {lineGroups.length} paket dipilih
-            </p>
-          )}
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex flex-col bg-white border-t rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.15)] lg:sticky lg:top-24 lg:self-start lg:bg-transparent lg:shadow-none lg:p-0 lg:border-none lg:rounded-none lg:w-full">
+      <div className="bg-surface rounded-t-3xl lg:rounded-2xl shadow-sm lg:overflow-hidden relative flex flex-col">
+        
+        {/* Mobile Toggle & Total Header */}
+        <div 
+          className="flex lg:hidden items-center justify-between p-5 pb-3 cursor-pointer"
+          onClick={() => setIsMobileExpanded(!isMobileExpanded)}
+        >
+          <div className="flex flex-col">
+            <span className="text-sm text-primary font-bold mb-0.5">
+              Total ({totalItems} item)
+            </span>
+            <span className="text-2xl font-bold text-primary leading-none">
+              {formatCurrency(total)}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-primary">
+            <span className="text-xs font-semibold">{isMobileExpanded ? "Tutup" : "Detail"}</span>
+            <ChevronUp 
+              size={20} 
+              className={cn("transition-transform duration-300", isMobileExpanded ? "rotate-180" : "")} 
+            />
+          </div>
         </div>
 
-        <div className="p-5">
-          {hasSelection ? (
-            <div className="space-y-4 mb-3">
-              {lineGroups.map((group, gi) => (
-                <div key={gi}>
-                  <div className="flex items-baseline justify-between mb-4">
-                    <span className="font-semibold text-xl text-primary">{group.pkgName}</span>
-                    <span className="font-semibold text-xl text-primary">
-                      {formatCurrency(group.pkgTotal)}
-                    </span>
-                  </div>
-                  {group.dateLabel && (
-                    <p className="text-md text-primary mb-2">{group.dateLabel}</p>
-                  )}
-                  <div className="space-y-1.5 pl-2 border-l-2 border-surface-dark">
-                    {group.items.map((item, ii) => (
-                      <div key={ii} className="flex justify-between text-xs">
-                        <span className="text-muted">
-                          {item.label}
-                          <span className="ml-1">× {item.qty}</span>
-                          {item.nights > 1 && (
-                            <span className="ml-1 text-muted/70">× {item.nights} mlm</span>
-                          )}
+        {/* Collapsible Details Content */}
+        <div className={cn(
+          "w-full overflow-hidden transition-all duration-300 ease-in-out lg:opacity-100 lg:max-h-none",
+          isMobileExpanded ? "max-h-[50vh] opacity-100" : "max-h-0 opacity-0"
+        )}>
+          <div className="overflow-y-auto max-h-[50vh] lg:max-h-none">
+            {/* Desktop header Ringkasan Pesanan */}
+            <div className="hidden lg:block px-5 py-4">
+              <h3 className="font-bold text-primary text-2xl">Ringkasan Pesanan</h3>
+              {hasSelection && (
+                <p className="text-accent/80 text-xs mt-0.5">
+                  {lineGroups.length} paket dipilih
+                </p>
+              )}
+            </div>
+
+            <div className="p-5 lg:pt-0 pt-0">
+              {hasSelection ? (
+                <div className="space-y-4 mb-3">
+                  <div className="block lg:hidden border-t-2 border-surface-dark mb-4"></div>
+                  {lineGroups.map((group, gi) => (
+                    <div key={gi}>
+                      <div className="flex items-baseline justify-between mb-2">
+                        <span className="font-semibold text-xl text-primary">{group.pkgName}</span>
+                        <span className="font-semibold text-lg text-primary">
+                          {formatCurrency(group.pkgTotal)}
                         </span>
                       </div>
-                    ))}
-                  </div>
-                  {!group.dateLabel && (
-                    <p className="text-xs text-orange-500 mt-1.5">
-                      Pilih tanggal untuk paket ini
-                    </p>
-                  )}
-                  {gi < lineGroups.length - 1 && (
-                    <div className="mt-3 border-t border-surface" />
-                  )}
+                      {group.dateLabel && (
+                        <p className="text-sm font-medium text-primary mb-2">{group.dateLabel}</p>
+                      )}
+                      <div className="space-y-1.5 pl-2 border-l-2 border-surface-dark">
+                        {group.items.map((item, ii) => (
+                          <div key={ii} className="flex justify-between text-xs">
+                            <span className="text-muted font-medium">
+                              {item.label}
+                              <span className="ml-1 text-primary">× {item.qty}</span>
+                              {item.nights > 1 && (
+                                <span className="ml-1 text-muted/70">× {item.nights} mlm</span>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      {!group.dateLabel && (
+                        <p className="text-xs text-orange-500 mt-1.5 font-medium">
+                          Pilih tanggal untuk paket ini
+                        </p>
+                      )}
+                      {gi < lineGroups.length - 1 && (
+                        <div className="mt-4 border-t border-surface" />
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          ) : (
-            <div className="py-8 text-center">
-              <p className="text-sm text-muted">Belum ada tiket yang dipilih</p>
-              <p className="text-xs text-muted/70 mt-1">
-                Pilih tiket dari paket di sebelah kiri
-              </p>
-            </div>
-          )}
+              ) : (
+                <div className="py-8 text-center">
+                  <p className="text-sm text-muted font-medium">Belum ada tiket yang dipilih</p>
+                  <p className="text-xs text-muted/70 mt-1">
+                    Pilih tiket dari paket di sebelah kiri
+                  </p>
+                </div>
+              )}
 
-          {hasSelection && (
-            <div className="border-t border-surface-dark pt-3 mb-4">
-              <div className="flex justify-between items-center">
-                <span className="text-xl font-semibold text-muted">Total</span>
-                <span className="text-xl font-bold text-primary">{formatCurrency(total)}</span>
-              </div>
+              {/* Desktop Total Box */}
+              {hasSelection && (
+                <div className="hidden lg:flex border-t border-surface-dark pt-3 mb-4 justify-between items-center">
+                  <span className="text-xl font-semibold text-muted">Total</span>
+                  <span className="text-xl font-bold text-primary">{formatCurrency(total)}</span>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+        </div>
 
+        {/* Always Visible Footer Button */}
+        <div className="p-5 pt-3 lg:pt-0">
           <button
             type="button"
             onClick={handleContinue}
             disabled={!canContinue}
             className={cn(
-              "w-full py-4 rounded-full font-normal text-xl transition-all duration-200",
+              "w-full py-4 rounded-full font-bold text-xl transition-all duration-300",
               canContinue
-                ? "bg-primary text-white hover:bg-primary/90 shadow-sm hover:shadow-md"
-                : "bg-surface text-muted cursor-not-allowed"
+                ? "bg-primary text-white hover:bg-primary/90 shadow-[0_8px_20px_rgba(26,37,23,0.15)] hover:-translate-y-0.5"
+                : "bg-surface text-muted cursor-not-allowed border-2 border-dashed border-surface-dark"
             )}
           >
             {buttonText}
           </button>
           {!canContinue && buttonAction === "checkout" && (
-            <p className="text-center text-xs text-muted mt-2">
+            <p className="text-center text-xs text-muted mt-2 font-medium">
               {!hasSelection
                 ? "Pilih minimal 1 tiket"
-                : "Lengkapi tanggal untuk semua paket"}
+                : "Lengkapi tanggal yang belum dipilih"}
             </p>
           )}
         </div>
+
       </div>
     </div>
   );

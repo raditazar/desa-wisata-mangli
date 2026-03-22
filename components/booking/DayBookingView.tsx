@@ -31,17 +31,17 @@ export default function DayBookingView() {
   const ticketsVisible = showTickets || hasAnyTicket;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-20 xl:gap-24 items-start">
+    <div className="flex flex-col lg:flex-row gap-20 xl:gap-24">
       {/* ── LEFT COLUMN ──────────────────────────────────────────────── */}
       <div className="flex-1 min-w-0 space-y-6">
         
         {/* Date Selection Section */}
-        <div className="bg-surface rounded-2xl px-8 py-7 border-4 border-white">
+        <div className="bg-surface rounded-4xl px-8 py-7 border-4 border-white">
           <h2 className="font-light text-5xl md:text-6xl text-primary leading-tight mb-8">
             Choose your <span className="font-bold">visit date</span>
           </h2>
           
-          <div>
+          <div className="border border-surface-dark/90 rounded-full">
             <CalendarOverlay
               mode="single"
               label=""
@@ -73,13 +73,13 @@ export default function DayBookingView() {
 
         {/* Grab Your Ticket Section */}
         {ticketsVisible && (
-          <div className="bg-surface border-4 border-white rounded-2xl px-8 py-7 shadow-sm space-y-6">
+          <div className="bg-surface border-4 border-white rounded-4xl px-8 py-7 shadow-sm space-y-6">
             <h1 className="font-light text-6xl text-primary leading-tight">
               Grab Your <span className="font-bold">Ticket</span>
             </h1>
 
             {/* Edukasi Berkebun Ticket Group */}
-            <div className="bg-white rounded-2xl overflow-hidden shadow-sm">
+            <div className="bg-white rounded-4xl overflow-hidden shadow-sm">
               <div className="bg-surface m-3 rounded-full py-3 px-5 flex items-center justify-center">
                 <h3 className="font-normal text-primary text-2xl">
                   {pkg.name}
@@ -119,7 +119,7 @@ export default function DayBookingView() {
         )}
 
         {/* Live-In at Mangli Promotion */}
-        <div className="bg-surface rounded-2xl overflow-hidden shadow-sm flex flex-col md:flex-row">
+        <div className="bg-surface rounded-4xl overflow-hidden shadow-sm flex flex-col md:flex-row">
           <div className="relative w-full md:w-2/5 h-48 md:h-auto">
              <Image
               src={liveInPkg.image}

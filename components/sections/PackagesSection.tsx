@@ -6,10 +6,25 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import { TOUR_PACKAGES } from "@/lib/constants";
 
-export default function PackagesSection() {
-  const liveIn = TOUR_PACKAGES.find((p) => p.id === "live-in")!;
-  const edukasi = TOUR_PACKAGES.find((p) => p.id === "edukasi-berkebun")!;
-  const comingSoon = TOUR_PACKAGES.find((p) => p.id === "coming-soon")!;
+export default function PackagesSection({ initialPackages = [] }: { initialPackages?: any[] }) {
+  const getMergedPackage = (id: string) => {
+    const staticPkg = TOUR_PACKAGES.find((p) => p.id === id)!;
+    const backendPkg = initialPackages.find((p: any) => p.slug === id);
+    if (!backendPkg) return staticPkg;
+    return {
+      ...staticPkg,
+      name: backendPkg.name || staticPkg.name,
+      description: backendPkg.description || staticPkg.description,
+      price: backendPkg.price ?? staticPkg.price,
+      image: backendPkg.image_url || staticPkg.image,
+      isAvailable: backendPkg.is_active ?? staticPkg.isAvailable,
+      maxTickets: backendPkg.max_participants ?? staticPkg.maxTickets,
+    };
+  };
+
+  const liveIn = getMergedPackage("live-in");
+  const edukasi = getMergedPackage("edukasi-berkebun");
+  const comingSoon = getMergedPackage("coming-soon");
 
   return (
     <section id="packages" className="py-16 lg:py-20">

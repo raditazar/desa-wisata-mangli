@@ -3,10 +3,12 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { DayPicker, type DateRange } from "react-day-picker";
+import "react-day-picker/style.css";
 import { id } from "date-fns/locale";
 import { format } from "date-fns";
-import { CalendarDays, X } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface CalendarOverlaySingleProps {
   mode: "single";
@@ -43,31 +45,35 @@ function formatDisplayValue(mode: "single" | "range", selected: Date | DateRange
 
 const dayPickerClassNames = {
   root: "text-sm select-none",
-  months: "flex flex-col",
-  month_caption: "flex justify-center items-center h-10 font-bold text-primary text-base",
-  nav: "absolute top-3 flex w-full justify-between px-1",
+  month: "space-y-4",
+  months: "flex flex-col gap-4",
+  month_caption: "flex justify-between items-center h-10 mb-2 px-1",
+  caption_label: "font-semibold text-xl text-primary",
+  nav: "flex items-center gap-2",
   button_previous: cn(
     "inline-flex items-center justify-center w-8 h-8 rounded-full",
-    "hover:bg-surface text-primary transition-colors"
+    "hover:bg-surface text-primary transition-colors cursor-pointer"
   ),
   button_next: cn(
     "inline-flex items-center justify-center w-8 h-8 rounded-full",
-    "hover:bg-surface text-primary transition-colors"
+    "hover:bg-surface text-primary transition-colors cursor-pointer"
   ),
-  weekday: "text-muted text-xs font-semibold w-10 h-8 flex items-center justify-center",
-  weeks: "mt-1",
-  week: "flex",
-  day: "w-10 h-10 text-center flex items-center justify-center",
+  month_grid: "w-full border-collapse",
+  weekdays: "flex justify-between mb-4", 
+  weekday: "text-primary/80 text-sm font-medium w-10 flex items-center justify-center m-0 p-0",
+  weeks: "",
+  week: "flex justify-between mt-2",
+  day: "w-10 h-10 text-center p-0 m-0 flex items-center justify-center text-sm font-medium text-primary/80",
   day_button: cn(
-    "w-9 h-9 rounded-full inline-flex items-center justify-center",
-    "hover:bg-surface transition-colors cursor-pointer text-sm font-medium"
+    "w-10 h-10 rounded-full inline-flex items-center justify-center",
+    "hover:bg-surface/80 transition-colors cursor-pointer font-semibold relative"
   ),
-  selected: "!bg-primary !text-white rounded-full font-bold",
-  disabled: "text-surface-dark cursor-not-allowed opacity-40",
-  today: "font-bold text-accent",
-  range_start: "!bg-primary !text-white rounded-l-full font-bold",
-  range_end: "!bg-primary !text-white rounded-r-full font-bold",
-  range_middle: "!bg-accent/20 rounded-none",
+  selected: "!bg-[#111811] !text-white rounded-full font-bold shadow-md",
+  disabled: "text-surface-dark cursor-not-allowed opacity-40 hover:bg-transparent",
+  today: "font-bold text-accent bg-accent/10",
+  range_start: "!bg-[#111811] !text-white rounded-l-full font-bold",
+  range_end: "!bg-[#111811] !text-white rounded-r-full font-bold",
+  range_middle: "!bg-surface-dark/30 !text-primary rounded-none",
   outside: "opacity-30",
 };
 
@@ -76,27 +82,25 @@ export default function CalendarOverlay(props: CalendarOverlayProps) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  
+  // Temporary state for the modal selection before Apply
+  const [tempSingle, setTempSingle] = useState<Date | undefined>(undefined);
+  const [tempRange, setTempRange] = useState<DateRange | undefined>(undefined);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Close on outside click
+  // When opening, sync temp state
   useEffect(() => {
-    if (!open) return;
-    const handleClick = (e: MouseEvent) => {
-      if (
-        overlayRef.current &&
-        !overlayRef.current.contains(e.target as Node) &&
-        triggerRef.current &&
-        !triggerRef.current.contains(e.target as Node)
-      ) {
-        setOpen(false);
+    if (open) {
+      if (props.mode === "single") {
+        setTempSingle(props.selected);
+      } else {
+        setTempRange(props.selected);
       }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
+    }
+  }, [open, props.selected, props.mode]);
 
   // Close on Escape
   useEffect(() => {
@@ -113,85 +117,111 @@ export default function CalendarOverlay(props: CalendarOverlayProps) {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
-  const calendarContent = (
-    <>
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/20 backdrop-blur-[2px] z-40"
-        onClick={() => setOpen(false)}
-      />
-      {/* Calendar card */}
-      <div
-        ref={overlayRef}
-        className="fixed z-50 bg-white rounded-2xl shadow-2xl border border-surface-dark p-5"
-        style={{
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm font-semibold text-primary">{props.label}</span>
-          <button
-            onClick={() => setOpen(false)}
-            className="w-7 h-7 rounded-full hover:bg-surface flex items-center justify-center text-muted transition-colors"
-          >
-            <X size={15} />
-          </button>
-        </div>
+  const handleApply = () => {
+    if (props.mode === "single") {
+      props.onSelect(tempSingle);
+    } else {
+      props.onSelect(tempRange);
+    }
+    setOpen(false);
+  };
 
-        {props.mode === "single" ? (
-          <DayPicker
-            mode="single"
-            selected={props.selected}
-            onSelect={(date) => {
-              props.onSelect(date);
-              if (date) setOpen(false);
-            }}
-            locale={id}
-            disabled={{ before: tomorrow }}
-            classNames={dayPickerClassNames}
+  const calendarContent = (
+    <AnimatePresence>
+      {open && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 bg-black/40 backdrop-blur-[2px]"
+            onClick={() => setOpen(false)}
           />
-        ) : (
-          <DayPicker
-            mode="range"
-            selected={props.selected}
-            onSelect={(range) => {
-              props.onSelect(range);
-              if (range?.from && range?.to) setOpen(false);
-            }}
-            locale={id}
-            disabled={{ before: tomorrow }}
-            min={1}
-            classNames={dayPickerClassNames}
-          />
-        )}
-      </div>
-    </>
+          
+          {/* Calendar card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 30, scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            ref={overlayRef}
+            className="relative z-101 bg-white rounded-2xl shadow-2xl border border-surface p-7 max-w-[340px] w-full mx-4"
+          >
+            {/* 
+              Custom wrapper classes to color Saturday and Sunday red 
+              In Indonesian locale, week starts on Monday, so Sat = 6th child, Sun = 7th child 
+              Also make the weekend days themselves red
+            */}
+            <div className="
+              [&_th:nth-last-child(1)]:text-red-500 [&_th:nth-last-child(2)]:text-red-500
+              [&_td:nth-last-child(1)_button]:text-red-500 [&_td:nth-last-child(2)_button]:text-red-500
+              [&_td:nth-last-child(1)_button.rdp-selected]:text-white [&_td:nth-last-child(2)_button.rdp-selected]:text-white
+            ">
+              <DayPicker
+                mode={props.mode as any}
+                selected={props.mode === "single" ? tempSingle : tempRange}
+                onSelect={(val: any) => {
+                  if (props.mode === "single") setTempSingle(val);
+                  else setTempRange(val);
+                }}
+                locale={id}
+                disabled={{ before: tomorrow }}
+                classNames={dayPickerClassNames}
+                components={{
+                  Chevron: (p) => p.orientation === "left" ? <ChevronLeft size={20} className="text-primary"/> : <ChevronRight size={20} className="text-primary"/>
+                }}
+              />
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => setOpen(false)}
+                className="flex-1 py-3 px-4 rounded-full border border-surface-dark text-primary font-medium hover:bg-surface transition-colors focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleApply}
+                className="flex-1 py-3 px-4 rounded-full bg-[#111811] text-white font-medium hover:bg-[#111811]/90 transition-colors focus:outline-none"
+              >
+                Apply
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 
   return (
     <div>
-      <label className="block text-sm font-semibold text-primary mb-1.5">{props.label}</label>
+      {props.label && (
+        <label className="block text-sm font-semibold text-primary mb-1.5 px-1">{props.label}</label>
+      )}
       <button
         ref={triggerRef}
         type="button"
         onClick={() => setOpen(!open)}
         className={cn(
-          "w-full flex items-center gap-3 px-4 py-5 rounded-2xl border bg-surface",
-          "text-left transition-all duration-150 focus:outline-none",
+          "w-full flex items-center gap-3 px-5 py-4 rounded-2xl bg-surface",
+          "text-left transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 hover:shadow-md",
           open
-            ? "border-primary ring-1 ring-primary"
-            : "border-primary hover:border-primary"
+            ? "ring-2 ring-primary shadow-lg bg-surface-dark/20"
+            : ""
         )}
       >
-        <CalendarDays size={17} className={displayValue ? "text-accent" : "text-muted"} />
-        <span className={cn("flex-1 text-xl", displayValue ? "text-primary font-semibold" : "text-primary/60")}>
+        <div className={cn("p-2 rounded-xl transition-colors", displayValue ? "bg-[#111811] text-white" : "bg-white text-muted")}>
+           <CalendarDays size={20} />
+        </div>
+        <span className={cn("flex-1 text-lg", displayValue ? "text-primary font-bold" : "text-primary/50 font-medium")}>
           {displayValue || props.placeholder || "Pilih tanggal"}
         </span>
       </button>
 
-      {mounted && open && createPortal(calendarContent, document.body)}
+      {mounted && createPortal(calendarContent, document.body)}
     </div>
   );
 }

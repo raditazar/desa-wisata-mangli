@@ -8,14 +8,22 @@ import { NAV_LINKS } from "@/lib/constants";
 import type { NavLink } from "@/lib/types";
 import MobileMenu from "./MobileMenu";
 
+import { usePathname } from "next/navigation";
+
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#hero");
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLLIElement>(null);
+  const pathname = usePathname();
 
   // Scroll-based active section detection — default to #hero when no section visible
   useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection(pathname);
+      return;
+    }
+
     const sectionIds = NAV_LINKS.map((link) => link.href.replace("#", ""));
     let latestActive = "#hero";
 
@@ -28,20 +36,23 @@ export default function Navbar() {
           }
         });
       },
-      { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" }
+      { threshold: 0.3, rootMargin: "-80px 0px 0px 0px" },
     );
 
     const hasSections = sectionIds.some((id) => {
       const el = document.getElementById(id);
-      if (el) { observer.observe(el); return true; }
+      if (el) {
+        observer.observe(el);
+        return true;
+      }
       return false;
     });
 
-    // If no sections found on this page (e.g. /booking), keep default active
+    // If no sections found on this page (e.g. /booking) and it somehow bypassed pathname check
     if (!hasSections) setActiveSection("#hero");
 
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -59,7 +70,10 @@ export default function Navbar() {
 
   const isActive = (link: NavLink) => {
     if (link.hasDropdown && link.children) {
-      return link.children.some((child) => activeSection === child.href) || activeSection === link.href;
+      return (
+        link.children.some((child) => activeSection === child.href) ||
+        activeSection === link.href
+      );
     }
     return activeSection === link.href;
   };
@@ -70,7 +84,7 @@ export default function Navbar() {
         <nav className="section-container flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span className="text-2xl lg:text-3xl font-bold tracking-tight text-[#1a2517] lowercase">
+            <span className="text-2xl lg:text-3xl font-bold tracking-tight text-primary lowercase">
               mangli
             </span>
           </Link>
@@ -90,8 +104,8 @@ export default function Navbar() {
                       onClick={() => setDropdownOpen(!dropdownOpen)}
                       className={`group relative flex items-center gap-1 text-base font-medium transition-all duration-300 py-2 cursor-pointer ${
                         isActive(link)
-                          ? "text-[#1a2517]"
-                          : "text-[#1a2517]/40 hover:text-[#1a2517]/70"
+                          ? "text-primary"
+                          : "text-primary/40 hover:text-primary/70"
                       }`}
                     >
                       {link.label}
@@ -106,7 +120,11 @@ export default function Navbar() {
                         <motion.span
                           layoutId="nav-active-dot"
                           className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#acc8a2]"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                          transition={{
+                            type: "spring",
+                            stiffness: 380,
+                            damping: 30,
+                          }}
                         />
                       )}
                     </button>
@@ -126,7 +144,7 @@ export default function Navbar() {
                               key={child.href}
                               href={child.href}
                               onClick={() => setDropdownOpen(false)}
-                              className="block px-5 py-3.5 text-sm font-medium text-[#1a2517]/60 hover:bg-[#acc8a2]/10 hover:text-[#1a2517] transition-all duration-200"
+                              className="block px-5 py-3.5 text-sm font-medium text-primary/60 hover:bg-[#acc8a2]/10 hover:text-primary transition-all duration-200"
                             >
                               {child.label}
                             </Link>
@@ -141,8 +159,8 @@ export default function Navbar() {
                     href={link.href}
                     className={`group relative text-base font-medium transition-all duration-300 py-2 ${
                       isActive(link)
-                        ? "text-[#1a2517]"
-                        : "text-[#1a2517]/40 hover:text-[#1a2517]/70"
+                        ? "text-primary"
+                        : "text-primary/40 hover:text-primary/70"
                     }`}
                   >
                     {link.label}
@@ -151,7 +169,11 @@ export default function Navbar() {
                       <motion.span
                         layoutId="nav-active-dot"
                         className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-[#acc8a2]"
-                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 30,
+                        }}
                       />
                     )}
                   </a>
@@ -164,7 +186,7 @@ export default function Navbar() {
           <div className="hidden lg:block">
             <Link
               href="/booking"
-              className="group relative inline-flex items-center justify-center h-12 px-9 text-base font-semibold rounded-full bg-[#1a2517] text-white overflow-hidden transition-all duration-300 hover:shadow-[0_0_28px_rgba(172,200,162,0.55)] hover:scale-105"
+              className="group relative inline-flex items-center justify-center h-12 px-9 text-base font-semibold rounded-full bg-primary text-white overflow-hidden transition-all duration-300 hover:shadow-[0_0_28px_rgba(172,200,162,0.55)] hover:scale-105"
             >
               <span className="relative z-10">Beli Tiket</span>
               {/* Hover glow background */}
@@ -175,7 +197,7 @@ export default function Navbar() {
           {/* Mobile hamburger */}
           <button
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden p-2 text-[#1a2517]"
+            className="lg:hidden p-2 text-primary"
             aria-label="Buka menu"
           >
             <Menu size={28} />

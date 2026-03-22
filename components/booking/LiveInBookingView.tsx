@@ -23,14 +23,16 @@ export default function LiveInBookingView() {
   const hasValidDate = !!pkgDates.checkIn && !!pkgDates.checkOut;
 
   const hasAnyTicket = pkg.ticketGroups.some((g) =>
-    g.items.some((item) => (ticketSelections[item.id] ?? 0) > 0)
+    g.items.some((item) => (ticketSelections[item.id] ?? 0) > 0),
   );
 
   function nightsCount(checkIn?: Date, checkOut?: Date): number {
     if (!checkIn || !checkOut) return 0;
     return Math.max(
       1,
-      Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24))
+      Math.ceil(
+        (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
+      ),
     );
   }
 
@@ -38,37 +40,40 @@ export default function LiveInBookingView() {
   const ticketsVisible = showTickets || hasAnyTicket;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-20 xl:gap-24 items-start">
+    <div className="flex flex-col lg:flex-row gap-20 xl:gap-24">
       {/* ── LEFT COLUMN ──────────────────────────────────────────────── */}
       <div className="flex-1 min-w-0 space-y-6">
-        
         {/* Date Selection Section */}
-        <div className="bg-surface rounded-2xl px-8 py-7 border-4 border-white">
+        <div className="bg-surface rounded-4xl px-8 py-7 border-4 border-white">
           <h2 className="font-light text-5xl md:text-6xl text-primary leading-tight mb-8">
             Choose your <span className="font-bold">stay dates</span>
           </h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-xl">
-            <CalendarOverlay
-              mode="single"
-              label="Check-in"
-              placeholder="Pilih tanggal masuk"
-              selected={pkgDates.checkIn}
-              onSelect={(date) =>
-                setPackageDates(pkgId, { checkIn: date, checkOut: undefined })
-              }
-            />
-            <CalendarOverlay
-              mode="single"
-              label="Check-out"
-              placeholder="Pilih tanggal keluar"
-              selected={pkgDates.checkOut}
-              onSelect={(date) =>
-                setPackageDates(pkgId, { ...pkgDates, checkOut: date })
-              }
-            />
+
+          <div className="grid grid-cols-1  sm:grid-cols-2 gap-4 ">
+            <div className="border border-surface-dark/90 rounded-full">
+              <CalendarOverlay
+                mode="single"
+                label=""
+                placeholder="Pilih tanggal masuk"
+                selected={pkgDates.checkIn}
+                onSelect={(date) =>
+                  setPackageDates(pkgId, { checkIn: date, checkOut: undefined })
+                }
+              />
+            </div>
+            <div className="border border-surface-dark/90 rounded-full">
+              <CalendarOverlay
+                mode="single"
+                label=""
+                placeholder="Pilih tanggal keluar"
+                selected={pkgDates.checkOut}
+                onSelect={(date) =>
+                  setPackageDates(pkgId, { ...pkgDates, checkOut: date })
+                }
+              />
+            </div>
           </div>
-          
+
           {pkgDates.checkIn && pkgDates.checkOut && (
             <p className="text-sm text-accent font-semibold mt-3">
               Total menginap: {nights} malam
@@ -84,28 +89,30 @@ export default function LiveInBookingView() {
                 "w-full px-10 py-6 rounded-full font-medium text-xl transition-all duration-200",
                 hasValidDate
                   ? "bg-primary/50 text-white hover:bg-primary/60 shadow-sm"
-                  : "bg-surface-dark text-muted cursor-not-allowed"
+                  : "bg-surface-dark text-muted cursor-not-allowed",
               )}
             >
               Check Tickets
             </button>
             {!hasValidDate && (
-              <p className="text-sm text-muted mt-2">Pilih tanggal check-in dan check-out</p>
+              <p className="text-sm text-muted mt-2">
+                Pilih tanggal check-in dan check-out
+              </p>
             )}
           </div>
         </div>
 
         {/* Grab Your Ticket Section */}
         {ticketsVisible && (
-          <div className="bg-surface border-4 border-white rounded-2xl px-8 py-7 shadow-sm space-y-6">
-            <h2 className="font-bold text-4xl text-primary leading-tight">
-              Grab your ticket
+          <div className="bg-surface border-4 border-white rounded-4xl px-8 py-7 shadow-sm space-y-6">
+            <h2 className="font-light text-6xl text-primary leading-tight">
+              Grab Your <span className="font-bold">Ticket</span>
             </h2>
 
             {/* Live-In Ticket Group */}
             <div className="bg-white rounded-xl overflow-hidden shadow-sm">
-              <div className="bg-surface py-3 px-5 flex items-center justify-center">
-                <h3 className="font-semibold text-primary text-lg">
+              <div className="bg-surface m-3 rounded-full py-3 px-5 flex items-center justify-center">
+                <h3 className="font-normal text-primary text-2xl">
                   {pkg.name}
                 </h3>
               </div>
@@ -119,8 +126,8 @@ export default function LiveInBookingView() {
                 ))}
               </div>
             </div>
-            
-             {!hasValidDate && (
+
+            {!hasValidDate && (
               <p className="text-xs text-muted mt-2">
                 Pilih tanggal untuk melihat harga per malam yang akurat
               </p>
@@ -129,9 +136,9 @@ export default function LiveInBookingView() {
         )}
 
         {/* Promo Edukasi Berkebun */}
-        <div className="bg-surface rounded-2xl overflow-hidden shadow-sm flex flex-col md:flex-row">
+        <div className="bg-surface rounded-4xl overflow-hidden shadow-sm flex flex-col md:flex-row">
           <div className="relative w-full md:w-2/5 h-48 md:h-auto">
-             <Image
+            <Image
               src={promoPkg.image}
               alt={promoPkg.name}
               fill
@@ -139,7 +146,9 @@ export default function LiveInBookingView() {
             />
           </div>
           <div className="p-8 flex-1 flex flex-col justify-center">
-            <h2 className="font-bold text-3xl text-primary mb-2">Edukasi Berkebun</h2>
+            <h2 className="font-bold text-3xl text-primary mb-2">
+              Edukasi Berkebun
+            </h2>
             <p className="text-muted text-sm mb-6 line-clamp-3">
               {promoPkg.description}
             </p>
@@ -153,7 +162,6 @@ export default function LiveInBookingView() {
             </div>
           </div>
         </div>
-
       </div>
 
       {/* ── RIGHT COLUMN (STICKY SUMMARY) ────────────────────────────── */}
